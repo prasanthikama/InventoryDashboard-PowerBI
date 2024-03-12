@@ -1,0 +1,22 @@
+
+Avg. Days pre order = AVERAGE('Inventory Stock Control'[Days Per Reorder])
+
+Decommissioned Products = CALCULATE(DISTINCTCOUNT('Inventory Stock Control'[Item Name]),'Inventory Stock Control'[Item Discontinued?]="Yes")
+
+Expected Costs for Upcoming Re-stocking Requirements = CALCULATE ( [Total Costs Of Re-Order Products], FILTER ( 'Inventory Stock Control', 'Inventory Stock Control'[Stock Quantity] <= 'Inventory Stock Control'[Reorder Level] * 1.8 ) )
+
+How Old is Inventory = DATEDIFF(MAX('Inventory Stock Control'[Date Of Last Order]),TODAY(),DAY) Inv. Purchased Last 30 Days = CALCULATE ( [Total Quantity Sold], DATESBETWEEN ( 'Dates'[Date], LASTDATE ( 'Sales Data'[OrderDate] ) - 30, LASTDATE ( 'Sales Data'[OrderDate] ) ) )
+
+Inv. Restocking Costs = CALCULATE ( [Total Costs Of Re-Order Products], FILTER ( 'Inventory Stock Control', 'Inventory Stock Control'[Stock Quantity] < 'Inventory Stock Control'[Reorder Level]
+
+))
+
+Inventory Value = SUM('Inventory Stock Control'[Total Value])
+
+Re-Order Products = CALCULATE ( DISTINCTCOUNT ( 'Inventory Stock Control'[Item Name] ), FILTER ( 'Inventory Stock Control', 'Inventory Stock Control'[Stock Quantity] <= 'Inventory Stock Control'[Reorder Level] ) )
+
+Stock Quantity Status = IF ( [Total Stock Inventory], IF ( [Total Stock Inventory] <= MAX ( 'Inventory Stock Control'[Reorder Level] ), "Needs Reodering", IF ( [Total Stock Inventory] <= MAX ( 'Inventory Stock Control'[Reorder Level] ) * 1.8, "Low Stock", "Safety Stock Level" ) ), BLANK ()
+
+Total Costs Of Re-Order Products = SUMX('Inventory Stock Control', 'Inventory Stock Control'[Cost Per Item] * 'Inventory Stock Control'[Item Reorder Quantity]) )
+
+Total Customers = DISTINCTCOUNT('Customers'[CustomerName])
